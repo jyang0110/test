@@ -14,8 +14,9 @@ LARGE_FONT = "Vernada", 20
 SMALL_FONT = "Vernada", 15
 
 win = tk.Tk()
-win.wm_geometry("400x400")
+win.wm_geometry("600x400")
 win.title("Thermometer")
+win.resizable(0,0)
 
 frame = Frame(win)
 
@@ -79,10 +80,12 @@ def animate(i):
     if(y[0]>-20 and len(phoneNumber.get())>=10):
         if minRange.get()!='':
             if int(minRange.get())>y[0]:
-                print("text message: below minimum")
+                #change to send txt message code instead of print
+                print(minRangeMessage.get())
         if maxRange.get()!='':
             if int(maxRange.get())<y[0]:
-                print("text message: above maximum")
+                #change to send txt message code instead of print
+                print(maxRangeMessage.get())
     
     if(y[0] <=-20):
         ctemp.configure(text = "unplugged sensor")
@@ -175,9 +178,9 @@ def changeUnits():
 
 def toggleLED():
     if displayLED.cget("text") == "Turn on LEDs":
-        displayLED.configure(text = "Turn off LEDs")
+        displayLED.configure(text = "Turn off LEDs", bg = "red")
     else:
-        displayLED.configure(text = "Turn on LEDs")
+        displayLED.configure(text = "Turn on LEDs", bg = "green")
     #do something
 
 
@@ -185,18 +188,25 @@ def toggleLED():
 maxRange = tk.StringVar()
 maxEntry = ttk.Entry(win,width=3,textvariable = maxRange)
 maxEntry.grid(column=1,row=1)
-maxLabel = ttk.Label(win, text="max temp", font = SMALL_FONT)
+maxLabel = ttk.Label(win, text="max temp (\u2103)", font = SMALL_FONT)
 maxLabel.grid(column=0,row=1)
-#maxResult = ttk.Label(win, text="")
-#maxResult.grid(column = 2, row=1)
+maxRangeMessage = tk.StringVar()
+maxMessageEntry = ttk.Entry(win, width = 30, textvariable = maxRangeMessage)
+maxMessageEntry.grid(column=3, row=1)
+maxMessageLabel = ttk.Label(win, text="message", font = SMALL_FONT)
+maxMessageLabel.grid(column=2, row=1)
 
 minRange = tk.StringVar()
 minEntry = ttk.Entry(win,width=3,textvariable = minRange)
 minEntry.grid(column=1,row=2)
-minLabel = ttk.Label(win, text="min temp",font = SMALL_FONT)
+minLabel = ttk.Label(win, text="min temp (\u2103)",font = SMALL_FONT)
 minLabel.grid(column=0,row=2)
-#minResult = ttk.Label(win, text="")
-#minResult.grid(column = 2, row=2)
+minRangeMessage = tk.StringVar()
+minMessageEntry = ttk.Entry(win, width = 30, textvariable = minRangeMessage)
+minMessageEntry.grid(column=3, row=2)
+minMessageLabel = ttk.Label(win, text="message", font = SMALL_FONT)
+minMessageLabel.grid(column=2, row=2)
+
 
 phoneNumber = tk.StringVar()
 phoneNumberEntry = ttk.Entry(win, width=10,textvariable=phoneNumber)
@@ -204,8 +214,7 @@ phoneNumberEntry.grid(column=1,row=3)
 phoneLabel = ttk.Label(win, text="phone number",  font = SMALL_FONT)
 phoneLabel.grid(column = 0, row = 3)
 
-
-switchUnits = ttk.Button(win, text = "Change to \u2109",command = changeUnits)
+switchUnits = Button(win, text = "Change to \u2109",command = changeUnits, height = 2, width = 10)
 switchUnits.grid(column=1, row=0)
 
 #ctemp.configure(text = str(getCurrentTemp()) + ctemp.cget("text"))
@@ -213,7 +222,7 @@ switchUnits.grid(column=1, row=0)
 #setTemp = ttk.Button(win, text = "Set Range",command = setRange)
 #setTemp.grid(column=1, row=4)
 
-displayLED = ttk.Button(win, text = "Turn on LEDs",command = toggleLED)
+displayLED = Button(win, text = "Turn on LEDs",command = toggleLED, bg = "green", height = 2, width = 10)
 displayLED.grid(column=1, row=4)
 
 fig = plt.figure()

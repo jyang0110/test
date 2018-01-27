@@ -82,7 +82,6 @@ class mainPage(tk.Frame):
 
         button2 = ttk.Button(self, text = "Virtual button")
 
-        counter =0
 
 
         canvas = FigureCanvasTkAgg(f, self)

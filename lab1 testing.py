@@ -8,7 +8,8 @@ import random
 
 '''
 y = []
-with open('testing.txt','r') as file:
+
+with open('C:\\Users\\yangw\\seniorDesign\\test\\testing.txt','r') as file:
     plots = csv.reader(file)
     for row in plots:
         y.append(row[0])

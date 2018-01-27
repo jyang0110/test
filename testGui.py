@@ -74,6 +74,8 @@ class StartPage(tk.Frame):
 
 
 class mainPage(tk.Frame):
+
+
     def __init__(self,parent,controller):
         tk.Frame.__init__(self,parent)
 
@@ -83,7 +85,6 @@ class mainPage(tk.Frame):
         button2 = ttk.Button(self, text = "Virtual button")
 
 
-
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()
         canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
@@ -91,6 +92,12 @@ class mainPage(tk.Frame):
         toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+
+    def countClicks(self):
+        self.bttn_clicks +=1
+
+
 
 
 app = Thermometer()

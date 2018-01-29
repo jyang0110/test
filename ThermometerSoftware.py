@@ -42,16 +42,15 @@ Grid.columnconfigure(win,4,weight =1)
 
 Grid.rowconfigure(win,5,weight =1)
 Grid.columnconfigure(win,5,weight =1)
-#win.resizable(0,0)
 ctemp = ttk.Label(win, text="NA \u2103", font = LARGE_FONT,   foreground = 'red')
 ctemp.grid(column=0, row=0)
+
 
 #make sure the data file is not empty, or may cause an error
 #do so by padding end of file
 y = np.loadtxt('data.txt',unpack=True)
 fileData = open('data.txt','w')
 for i in range(len(y)):
-    #print(y[i])
     fileData.write(str(y[i]))
     fileData.write('\n')
 fileData.write("-100\n-100\n-100\n")
@@ -62,9 +61,8 @@ fileLED = open('LED.txt','w')
 fileLED.write("OFF")
 fileLED.close()
 
+#code to test adding random data to the file
 def addToFile(y):
-    #temp = np.loadtxt('testing.txt',unpack=True)
-    #print(temp)
     file = open('data.txt','w')
     file.write(str(random.randint(10,50)))
     file.write('\n')
@@ -74,36 +72,57 @@ def addToFile(y):
         file.write('\n')
     file.close()
 
+#max range
 def getMax():
     if maxRange.get()=='':
-        return 50
+        return 100
     else:
         return int(maxRange.get())
-    #get value from gui
 
+#min range
 def getMin():
     if minRange.get()=='':
-        return 0
+        return -50
     else:
         return int(minRange.get())
-    #get value from gui
 
 def animate(i):
     #need to deal with possibility of y not being [] (only one val)
     ax1.clear()
     y = np.loadtxt('data.txt',unpack=True)
-    
+
+    #check if data has been updated
+    same=True
+    for i in range(min(len(y),len(lastData))):
+        if lastData[i]!=y[i]:
+            same=False
+            
+    #if hasn't been updated shift everything by one
+    if(same):
+        fileData = open('data.txt','w')
+        fileData.write("-100\n")
+        for i in range(len(y)):
+            fileData.write(str(y[i]))
+            fileData.write('\n')
+        fileData.close()
+        y = np.loadtxt('data.txt',unpack=True)
+        
+    #copy back over
+    for i in range(min(len(y),len(lastData))):
+        lastData[i]=y[i]
+
     if(y[0]>-20 and len(phoneNumber.get())>=10):
         if minRange.get()!='':
-            if int(minRange.get())>y[0] and (y[1]>int(minRange.get()) or y[1]<-20):
+            if int(minRange.get())>y[0] and (y[1]>=int(minRange.get()) or y[1]<-20):
                 #change to send txt message code instead of print
                 print(minRangeMessage.get())
         if maxRange.get()!='':
-            if int(maxRange.get())<y[0] and y[1]<int(maxRange.get()):
+            if int(maxRange.get())<y[0] and y[1]<=int(maxRange.get()):
                 #change to send txt message code instead of print
                 print(maxRangeMessage.get())
-    
-    if(y[0] <=-20):
+    if(same):
+         ctemp.configure(text = "no data available")
+    elif(y[0] <=-20):
         ctemp.configure(text = "unplugged sensor")
     elif("\u2109" in switchUnits.cget("text")):
         ctemp.configure(text = str(y[0]) + "\u2103")
@@ -111,11 +130,19 @@ def animate(i):
         ctemp.configure(text = str(y[0] * (9.0/5) + 32) + "\u2109")
         
     
-    #print (y)
     x = []
-    #addToFile(y)
+    #if more than 300 entries
     if(len(y)>300):
         y = y[0:299]
+        #trim this here or in other program
+        '''
+        fileData = open('data.txt','w')
+        for i in range(len(y)):
+            fileData.write(str(y[i]))
+            fileData.write('\n')
+        fileData.close()
+        '''
+    #trim for graph purposes
     i=0
     index=0
     brk = False
@@ -127,64 +154,48 @@ def animate(i):
                 x=[]
                 y=y[i:]
                 i=0
-                #print(x)
             x.append(index)
-            #print(x)
             i=i+1
         else:
             if(brk == False):
-                #print(y[0:len(x)])
-                #print(x)
                 ax1.plot(x,y[0:len(x)],color='C0')
                 brk = True
             y = np.delete(y,i)
         index = index +1
-    
+        
+    #lines representing the bounds        
     maxLine = np.empty(300)
     maxLine.fill(getMax())
     minLine = np.empty(300)
     minLine.fill(getMin())
     x1 = np.arange(len(maxLine))
-    #print (x)
-    #print (y)
-    ##print(x1)
-    ##print (maxLine)
-    ##print (minLine)
     ax1.plot(x,y,color='C0')
     ax1.plot(x1,maxLine,color='red')
     ax1.plot(x1,minLine,color='red')
+    
     plt.xlabel('seconds ago from the current time')
+    #bounds of the graph
     xmax=300
     xmin=0
-    ymax=50
-    ymin=10
+    ymax=63
+    ymin=-10
     plt.axis([xmin,xmax,ymin,ymax])
     plt.xticks(np.arange(0,350,50))
-    plt.yticks(np.arange(10,60,10))
+    plt.yticks(np.arange(-10,70,10))
     plt.gca().invert_xaxis()
+    
     plt.ylabel('Temperature (\u2103)')
     plt.title('Thermometer Data')
 
     
-
-'''
-def getCurrentTemp():
-    #get first value in file
-    temp = 40
-    if("\u2109" in switchUnits.cget("text")):
-        return temp
-    else:
-        return temp * (9.0/5) + 32
-'''
-
+#changes units from celcius to farenheit and vice versa
 def changeUnits():
     if("\u2109" in switchUnits.cget("text")):
-       #ctemp.configure(text = "\u2109")
        switchUnits.configure(text = "Change to \u2103")
     else:
-       #ctemp.configure(text="\u2103")
        switchUnits.configure(text = "Change to \u2109")
 
+#changes the LED from being on to off and vice versa
 def toggleLED():
     if displayLED.cget("text") == "Turn on LEDs":
         displayLED.configure(text = "Turn off LEDs", bg = "red")
@@ -198,6 +209,7 @@ def toggleLED():
         fileLED.close()
     #do something
 
+#when window is closed
 def closeProgram():
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
         fileLED = open('LED.txt','w')
@@ -240,21 +252,16 @@ phoneLabel.grid(column = 0, row = 3)
 switchUnits = Button(win, text = "Change to \u2109",command = changeUnits, height = 2, width = 10)
 switchUnits.grid(column=1, row=0)
 
-#ctemp.configure(text = str(getCurrentTemp()) + ctemp.cget("text"))
-
-#setTemp = ttk.Button(win, text = "Set Range",command = setRange)
-#setTemp.grid(column=1, row=4)
-
 displayLED = Button(win, text = "Turn on LEDs",command = toggleLED, bg = "limegreen", height = 2, width = 10)
 displayLED.grid(column=1, row=4)
 
 
 fig = plt.figure("Thermometer Graph")
-
+lastData = np.empty(300)
+lastData.fill(-40)
 ax1 = fig.add_subplot(1,1,1)
 ani = animation.FuncAnimation(fig,animate,interval=1000)
 win.protocol("WM_DELETE_WINDOW",closeProgram)
-#plt.protocol("Close Program", closeProgram)
 plt.show()
 
 win.mainloop()

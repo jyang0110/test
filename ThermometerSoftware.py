@@ -1,3 +1,10 @@
+#Group C&A
+#Lab one
+#Sources:
+#videos from : https://www.youtube.com/user/sentdex and https://www.lynda.com
+#tkinter documentation, matplotlib documentation
+#other basic python guides and various stackoverflow posts
+
 import tkinter as tk
 from tkinter import ttk
 import matplotlib.pyplot as plt

@@ -7,6 +7,7 @@ import urllib
 import matplotlib.animation as animation
 from matplotlib import style
 import random
+from tkinter import messagebox
 from tkinter import *
 
 LARGE_FONT = "Vernada", 20
@@ -191,12 +192,20 @@ def toggleLED():
         fileLED.write("ON")
         fileLED.close()
     else:
-        displayLED.configure(text = "Turn on LEDs", bg = "green")
+        displayLED.configure(text = "Turn on LEDs", bg = "limegreen")
         fileLED = open('LED.txt','w')
         fileLED.write("OFF")
         fileLED.close()
     #do something
 
+def closeProgram():
+    if messagebox.askokcancel("Quit", "Do you want to quit?"):
+        fileLED = open('LED.txt','w')
+        fileLED.write("OFF")
+        fileLED.close()
+        win.destroy()
+        plt.close()
+        
 
 
 maxRange = tk.StringVar()
@@ -236,12 +245,16 @@ switchUnits.grid(column=1, row=0)
 #setTemp = ttk.Button(win, text = "Set Range",command = setRange)
 #setTemp.grid(column=1, row=4)
 
-displayLED = Button(win, text = "Turn on LEDs",command = toggleLED, bg = "green", height = 2, width = 10)
+displayLED = Button(win, text = "Turn on LEDs",command = toggleLED, bg = "limegreen", height = 2, width = 10)
 displayLED.grid(column=1, row=4)
 
+
 fig = plt.figure("Thermometer Graph")
+
 ax1 = fig.add_subplot(1,1,1)
-ani = animation.FuncAnimation(fig,animate,interval=1000) 
+ani = animation.FuncAnimation(fig,animate,interval=1000)
+win.protocol("WM_DELETE_WINDOW",closeProgram)
+#plt.protocol("Close Program", closeProgram)
 plt.show()
 
 win.mainloop()

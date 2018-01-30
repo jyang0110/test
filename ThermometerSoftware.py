@@ -1,5 +1,5 @@
 #Group C&A
-#Lab one
+#Lab one graph and GUI code
 #Sources:
 #videos from : https://www.youtube.com/user/sentdex and https://www.lynda.com
 #tkinter documentation, matplotlib documentation
@@ -55,8 +55,8 @@ ctemp.grid(column=0, row=0)
 
 #make sure the data file is not empty, or may cause an error
 #do so by padding end of file
-y = np.loadtxt('data.txt',unpack=True)
-fileData = open('data.txt','w')
+y = np.loadtxt('datafile.txt',unpack=True)
+fileData = open('datafile.txt','w')
 for i in range(len(y)):
     fileData.write(str(y[i]))
     fileData.write('\n')
@@ -64,13 +64,13 @@ fileData.write("-100\n-100\n-100\n")
 fileData.close()
 
 #load LED file initially with LED off when program starts
-fileLED = open('LED.txt','w')
-fileLED.write("OFF")
+fileLED = open('checkbutton.txt','w')
+fileLED.write("False")
 fileLED.close()
 
 #code to test adding random data to the file
 def addToFile(y):
-    file = open('data.txt','w')
+    file = open('datafile.txt','w')
     file.write(str(random.randint(10,50)))
     file.write('\n')
     for i in range(len(y)):
@@ -96,7 +96,7 @@ def getMin():
 def animate(i):
     #need to deal with possibility of y not being [] (only one val)
     ax1.clear()
-    y = np.loadtxt('data.txt',unpack=True)
+    y = np.loadtxt('datafile.txt',unpack=True)
 
     #check if data has been updated
     same=True
@@ -106,13 +106,13 @@ def animate(i):
             
     #if hasn't been updated shift everything by one
     if(same):
-        fileData = open('data.txt','w')
+        fileData = open('datafile.txt','w')
         fileData.write("-100\n")
         for i in range(len(y)):
             fileData.write(str(y[i]))
             fileData.write('\n')
         fileData.close()
-        y = np.loadtxt('data.txt',unpack=True)
+        y = np.loadtxt('datafile.txt',unpack=True)
         
     #copy back over
     for i in range(min(len(y),len(lastData))):
@@ -143,7 +143,7 @@ def animate(i):
         y = y[0:299]
         #trim this here or in other program
         '''
-        fileData = open('data.txt','w')
+        fileData = open('datafile.txt','w')
         for i in range(len(y)):
             fileData.write(str(y[i]))
             fileData.write('\n')
@@ -206,21 +206,21 @@ def changeUnits():
 def toggleLED():
     if displayLED.cget("text") == "Turn on LEDs":
         displayLED.configure(text = "Turn off LEDs", bg = "red")
-        fileLED = open('LED.txt','w')
-        fileLED.write("ON")
+        fileLED = open('checkbutton.txt','w')
+        fileLED.write("True")
         fileLED.close()
     else:
         displayLED.configure(text = "Turn on LEDs", bg = "limegreen")
-        fileLED = open('LED.txt','w')
-        fileLED.write("OFF")
+        fileLED = open('checkbutton.txt','w')
+        fileLED.write("False")
         fileLED.close()
     #do something
 
 #when window is closed
 def closeProgram():
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
-        fileLED = open('LED.txt','w')
-        fileLED.write("OFF")
+        fileLED = open('checkbutton.txt','w')
+        fileLED.write("False")
         fileLED.close()
         win.destroy()
         plt.close()

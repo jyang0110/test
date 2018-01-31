@@ -16,6 +16,10 @@ from matplotlib import style
 import random
 from tkinter import messagebox
 from tkinter import *
+from twilio.rest import Client
+
+account_sid = "AC6b1f1bccd018165f0c10dd7de6a4a30d"
+auth_token = "9297c36a3df5de99f27583112d74ee00"
 
 LARGE_FONT = "Vernada", 20
 
@@ -85,6 +89,14 @@ def addToFile(y):
         file.write('\n')
     file.close()
 
+def sendMsg(number, msg):
+    client = Client(account_sid, auth_token)
+    
+    client.api.account.messages.create(
+    to= "+" + number,
+    from_="+12252404150",
+    body=msg)
+
 #max range
 def getMax():
     if maxRange.get()=='':
@@ -123,15 +135,14 @@ def animate(i):
     for i in range(min(len(y),len(lastData))):
         lastData[i]=y[i]
 
+    #send txt message
     if(y[0]>-20 and len(phoneNumber.get())>=10):
         if minRange.get()!='':
             if int(minRange.get())>y[0] and (y[1]>=int(minRange.get()) or y[1]<-20):
-                #change to send txt message code instead of print
-                print(minRangeMessage.get())
+                sendMsg(phoneNumber.get(), minRangeMessage.get())
         if maxRange.get()!='':
             if int(maxRange.get())<y[0] and y[1]<=int(maxRange.get()):
-                #change to send txt message code instead of print
-                print(maxRangeMessage.get())
+                sendMsg(phoneNumber.get(), maxRangeMessage.get())
     if(same):
          ctemp.configure(text = "no data available")
     elif(y[0] <=-20):

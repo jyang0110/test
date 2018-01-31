@@ -52,6 +52,12 @@ Grid.columnconfigure(win,5,weight =1)
 ctemp = ttk.Label(win, text="NA \u2103", font = LARGE_FONT,   foreground = 'red')
 ctemp.grid(column=0, row=0)
 
+#initial bounds of the graph
+xmax=300
+xmin=0
+ymax=50
+ymin=10
+
 
 #make sure the data file is not empty, or may cause an error
 #do so by padding end of file
@@ -95,7 +101,6 @@ def getMin():
 
 def animate(i):
     #need to deal with possibility of y not being [] (only one val)
-    ax1.clear()
     y = np.loadtxt('datafile.txt',unpack=True)
 
     #check if data has been updated
@@ -170,31 +175,46 @@ def animate(i):
             y = np.delete(y,i)
         index = index +1
         
-    #lines representing the bounds        
+    #lines representing the bounds
     maxLine = np.empty(300)
     maxLine.fill(getMax())
     minLine = np.empty(300)
     minLine.fill(getMin())
     x1 = np.arange(len(maxLine))
+    
+    
+    plt.xlabel('seconds ago from the current time')
+    #Hold limit zoomed in, but cannot zoom out further than original
+    if ax1.get_xlim()[0]<=300:
+        xmax=ax1.get_xlim()[0]
+    else:
+        xmax=100
+    if ax1.get_xlim()[1] >= 0:
+        xmin=ax1.get_xlim()[1]
+    else:
+        xmin=0
+    if ax1.get_ylim()[1] <=63:
+        ymax=ax1.get_ylim()[1]
+    else:
+        ymax=63
+    if ax1.get_ylim()[0] >=-10:
+        ymin=ax1.get_ylim()[0]
+    else:
+        ymin=-10
+    
+    ax1.clear()
     ax1.plot(x,y,color='C0')
     ax1.plot(x1,maxLine,color='red')
     ax1.plot(x1,minLine,color='red')
     
-    plt.xlabel('seconds ago from the current time')
-    #bounds of the graph
-    xmax=300
-    xmin=0
-    ymax=63
-    ymin=-10
     plt.axis([xmin,xmax,ymin,ymax])
-    plt.xticks(np.arange(0,350,50))
-    plt.yticks(np.arange(-10,70,10))
+    #plt.xticks(np.arange(0,350,50))
+    #plt.yticks(np.arange(-10,70,10))
     plt.gca().invert_xaxis()
     
     plt.ylabel('Temperature (\u2103)')
     plt.title('Thermometer Data')
 
-    
 #changes units from celcius to farenheit and vice versa
 def changeUnits():
     if("\u2109" in switchUnits.cget("text")):
@@ -267,6 +287,10 @@ fig = plt.figure("Thermometer Graph")
 lastData = np.empty(300)
 lastData.fill(-40)
 ax1 = fig.add_subplot(1,1,1)
+
+plt.axis([xmin,xmax,ymin,ymax])
+plt.gca().invert_xaxis()
+
 ani = animation.FuncAnimation(fig,animate,interval=1000)
 win.protocol("WM_DELETE_WINDOW",closeProgram)
 plt.show()

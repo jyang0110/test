@@ -116,10 +116,10 @@ def animate(i):
     y = np.loadtxt('datafile.txt',unpack=True)
 
     #check if data has been updated
-    same=True
-    for i in range(min(len(y),len(lastData))):
-        if lastData[i]!=y[i]:
-            same=False
+    same=False
+    #for i in range(min(len(y),len(lastData))):
+     #   if lastData[i]!=y[i]:
+      #      same=False
             
     #if hasn't been updated shift everything by one
     if(same):
@@ -165,6 +165,24 @@ def animate(i):
             fileData.write('\n')
         fileData.close()
         '''
+    #Hold limit zoomed in, but cannot zoom out further than original
+    if ax1.get_xlim()[0]<=300:
+        xmax=ax1.get_xlim()[0]
+    else:
+        xmax=100
+    if ax1.get_xlim()[1] >= 0:
+        xmin=ax1.get_xlim()[1]
+    else:
+        xmin=0
+    if ax1.get_ylim()[1] <=63:
+        ymax=ax1.get_ylim()[1]
+    else:
+        ymax=63
+    if ax1.get_ylim()[0] >=-10:
+        ymin=ax1.get_ylim()[0]
+    else:
+        ymin=-10
+    ax1.clear()
     #trim for graph purposes
     i=0
     index=0
@@ -195,25 +213,9 @@ def animate(i):
     
     
     plt.xlabel('seconds ago from the current time')
-    #Hold limit zoomed in, but cannot zoom out further than original
-    if ax1.get_xlim()[0]<=300:
-        xmax=ax1.get_xlim()[0]
-    else:
-        xmax=100
-    if ax1.get_xlim()[1] >= 0:
-        xmin=ax1.get_xlim()[1]
-    else:
-        xmin=0
-    if ax1.get_ylim()[1] <=63:
-        ymax=ax1.get_ylim()[1]
-    else:
-        ymax=63
-    if ax1.get_ylim()[0] >=-10:
-        ymin=ax1.get_ylim()[0]
-    else:
-        ymin=-10
+
     
-    ax1.clear()
+
     ax1.plot(x,y,color='C0')
     ax1.plot(x1,maxLine,color='red')
     ax1.plot(x1,minLine,color='red')

@@ -65,7 +65,7 @@ ymin=10
 
 #make sure the data file is not empty, or may cause an error
 #do so by padding end of file
-y = np.loadtxt('//192.168.20.223/Public/datafile.txt',unpack=True)
+y = np.loadtxt('datafile.txt',unpack=True)
 fileData = open('datafile.txt','w')
 for i in range(len(y)):
     fileData.write(str(y[i]))
@@ -74,13 +74,13 @@ fileData.write("-100\n-100\n-100\n")
 fileData.close()
 
 #load LED file initially with LED off when program starts
-fileLED = open('//192.168.20.223/Public/checkbutton.txt','w')
+fileLED = open('checkbutton.txt','w')
 fileLED.write("False")
 fileLED.close()
 
 #code to test adding random data to the file
 def addToFile(y):
-    file = open('//192.168.20.223/Public/datafile.txt','w')
+    file = open('datafile.txt','w')
     file.write(str(random.randint(10,50)))
     file.write('\n')
     for i in range(len(y)):
@@ -113,7 +113,7 @@ def getMin():
 
 def animate(i):
     #need to deal with possibility of y not being [] (only one val)
-    y = np.loadtxt('//192.168.20.223/Public/datafile.txt',unpack=True)
+    y = np.loadtxt('Public/datafile.txt',unpack=True)
 
     #check if data has been updated
     same=False
@@ -123,13 +123,13 @@ def animate(i):
             
     #if hasn't been updated shift everything by one
     if(same):
-        fileData = open('//192.168.20.223/Public/datafile.txt','w')
+        fileData = open('datafile.txt','w')
         fileData.write("-100\n")
         for i in range(len(y)):
             fileData.write(str(y[i]))
             fileData.write('\n')
         fileData.close()
-        y = np.loadtxt('//192.168.20.223/Public/datafile.txt',unpack=True)
+        y = np.loadtxt('datafile.txt',unpack=True)
         
     #copy back over
     for i in range(min(len(y),len(lastData))):
@@ -159,7 +159,7 @@ def animate(i):
         y = y[0:299]
         #trim this here or in other program
         '''
-        fileData = open('//192.168.20.223/Public/datafile.txt','w')
+        fileData = open('datafile.txt','w')
         for i in range(len(y)):
             fileData.write(str(y[i]))
             fileData.write('\n')
@@ -239,12 +239,12 @@ def changeUnits():
 def toggleLED():
     if displayLED.cget("text") == "Turn on LEDs":
         displayLED.configure(text = "Turn off LEDs", bg = "red")
-        fileLED = open('//192.168.20.223/Public/checkbutton.txt','w')
+        fileLED = open('checkbutton.txt','w')
         fileLED.write("True")
         fileLED.close()
     else:
         displayLED.configure(text = "Turn on LEDs", bg = "limegreen")
-        fileLED = open('//192.168.20.223/Public/checkbutton.txt','w')
+        fileLED = open('checkbutton.txt','w')
         fileLED.write("False")
         fileLED.close()
     #do something
@@ -252,7 +252,7 @@ def toggleLED():
 #when window is closed
 def closeProgram():
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
-        fileLED = open('//192.168.20.223/Public/checkbutton.txt','w')
+        fileLED = open('checkbutton.txt','w')
         fileLED.write("False")
         fileLED.close()
         win.destroy()

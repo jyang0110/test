@@ -113,7 +113,7 @@ def getMin():
 
 def animate(i):
     #need to deal with possibility of y not being [] (only one val)
-    y = np.loadtxt('Public/datafile.txt',unpack=True)
+    y = np.loadtxt('datafile.txt',unpack=True)
 
     #check if data has been updated
     same=False

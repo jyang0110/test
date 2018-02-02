@@ -290,7 +290,7 @@ phoneLabel = ttk.Label(win, text="phone number",  font = SMALL_FONT)
 phoneLabel.grid(column = 0, row = 3)
 
 switchUnits = Button(win, text = "Change to \u2109",command = changeUnits, height = 2, width = 10)
-switchUnits.grid(column=1, row=0)
+switchUnits.grid(column=2, row=0)
 
 displayLED = Button(win, text = "Turn on LEDs",command = toggleLED, bg = "limegreen", height = 2, width = 10)
 displayLED.grid(column=1, row=4)

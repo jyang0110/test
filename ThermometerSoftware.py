@@ -17,6 +17,7 @@ import random
 from tkinter import messagebox
 from tkinter import *
 from twilio.rest import Client
+import time
 
 account_sid = "AC6b1f1bccd018165f0c10dd7de6a4a30d"
 auth_token = "9297c36a3df5de99f27583112d74ee00"
@@ -65,6 +66,7 @@ ymin=10
 
 #make sure the data file is not empty, or may cause an error
 #do so by padding end of file
+'''
 y = np.loadtxt('datafile.txt',unpack=True)
 fileData = open('datafile.txt','w')
 for i in range(len(y)):
@@ -72,13 +74,26 @@ for i in range(len(y)):
     fileData.write('\n')
 fileData.write("-100\n-100\n-100\n")
 fileData.close()
+'''
+y = np.loadtxt('savedData.txt',unpack=True)
+fileData = open('savedData.txt','w')
+for i in range (len(y)):
+    fileData.write(str(y[i]))
+    fileData.write('\n')
+for i in range (300-len(y)):
+    fileData.write(str(-100))
+    fileData.write('\n')
+fileData.close()
 
 #load LED file initially with LED off when program starts
+
 fileLED = open('checkbutton.txt','w')
 fileLED.write("False")
 fileLED.close()
 
+
 #code to test adding random data to the file
+'''
 def addToFile(y):
     file = open('datafile.txt','w')
     file.write(str(random.randint(10,50)))
@@ -88,7 +103,12 @@ def addToFile(y):
         file.write(str(y[i]))
         file.write('\n')
     file.close()
-
+'''
+def getTimeDifference():
+    currentTime = time.time()
+    fileTime = np.loadtxt('time.txt',unpack=True)
+    difference = int(currentTime - fileTime)
+    return difference
 def sendMsg(number, msg):
     client = Client(account_sid, auth_token)
     
@@ -113,15 +133,34 @@ def getMin():
 
 def animate(i):
     #need to deal with possibility of y not being [] (only one val)
-    y = np.loadtxt('datafile.txt',unpack=True)
+    same=False
+    data = open('datafile.txt','r')
+    #print(data.read())
+    z=data.read()
+    data.flush()
+    data.close()
+    #z=data
+    #z = np.loadtxt('//192.168.137.192/Public/datafile.txt',unpack=True)
+    print(z)
+    y = np.empty(300)
+    for i in range (len(lastData)-1):
+        y[i+1]=lastData[i]
+    #if(getTimeDifference()>3):
+        #y[0]=-40
+        #same=False
+    #else:
+    y[0]=z
+    same=False
+    #print(y)
 
     #check if data has been updated
-    same=False
+     #True
     #for i in range(min(len(y),len(lastData))):
      #   if lastData[i]!=y[i]:
       #      same=False
             
     #if hasn't been updated shift everything by one
+    '''
     if(same):
         fileData = open('datafile.txt','w')
         fileData.write("-100\n")
@@ -130,11 +169,11 @@ def animate(i):
             fileData.write('\n')
         fileData.close()
         y = np.loadtxt('datafile.txt',unpack=True)
-        
+    '''
     #copy back over
     for i in range(min(len(y),len(lastData))):
         lastData[i]=y[i]
-
+    
     #send txt message
     if(y[0]>-20 and len(phoneNumber.get())>=10):
         if minRange.get()!='':
@@ -254,7 +293,20 @@ def closeProgram():
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
         fileLED = open('checkbutton.txt','w')
         fileLED.write("False")
+        fileLED.flush()
         fileLED.close()
+        fileData = open('savedData.txt','w')
+        for i in range (len(lastData)):
+            fileData.write(str(lastData[i]))
+            fileData.write('\n')
+        fileData.flush()
+        fileData.close()
+        
+        fileTime = open('time.txt','w')
+        fileTime.write(str(time.time()))
+        fileTime.flush()
+        fileTime.close()
+        
         win.destroy()
         plt.close()
         
@@ -297,8 +349,24 @@ displayLED.grid(column=1, row=4)
 
 
 fig = plt.figure("Thermometer Graph")
+savedData = np.loadtxt('savedData.txt',unpack=True)
+difference = getTimeDifference()
+print(difference)
 lastData = np.empty(300)
-lastData.fill(-40)
+
+if getTimeDifference()>3:
+    
+    for i in range (min(getTimeDifference(),300)):
+        lastData[i]=-80
+    for i in range (299 - difference):
+        lastData[i+difference]=savedData[i]
+else:
+    for i in range (299):
+        lastData[i]=savedData[i] 
+
+
+#lastData = np.empty(300)
+#lastData.fill(-40)
 ax1 = fig.add_subplot(1,1,1)
 
 plt.axis([xmin,xmax,ymin,ymax])

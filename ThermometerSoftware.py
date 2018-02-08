@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 #Group C&A
 #Lab one graph and GUI code
 #Sources:
@@ -5,8 +7,10 @@
 #tkinter documentation, matplotlib documentation
 #other basic python guides and various stackoverflow posts
 
-import tkinter as tk
-from tkinter import ttk
+
+
+import Tkinter as tk
+import ttk
 import matplotlib.pyplot as plt
 import csv
 import numpy as np
@@ -14,10 +18,54 @@ import urllib
 import matplotlib.animation as animation
 from matplotlib import style
 import random
-from tkinter import messagebox
-from tkinter import *
+import tkMessageBox
+from Tkinter import *
 from twilio.rest import Client
 import time
+import paramiko
+import socket
+
+#Sending data from PC to raspberry Pi
+def sendData(fileName):
+    if isOpen():
+        t = paramiko.Transport('192.168.20.223','22')
+        t.connect(username = 'pi', password = '123')
+        sftp = paramiko.SFTPClient.from_transport(t)
+        remotepath=fileName
+        local = "C:\\Users\\yangw\\Documents\\SD\\test\\"
+        localpath= (local + fileName)
+        sftp.put(localpath,remotepath)
+        t.close()
+
+#Downloading data from raspberry Pi to PC
+def downloadData(fileName):
+    if isOpen():
+        t = paramiko.Transport('192.168.20.223','22')
+        t.connect(username = 'pi', password = '123')
+        sftp = paramiko.SFTPClient.from_transport(t)
+        remotepath=fileName
+        local = 'C:\\Users\\yangw\\Documents\\SD\\test\\'
+        localpath= (local + fileName)
+        sftp.get(remotepath, localpath)
+        t.close()
+    
+def isOpen():
+    try:
+        t = paramiko.Transport('192.168.20.223','22')
+        t.connect(username = 'pi', password = '123')
+        return True
+    except:
+        return False
+    #transport = client.get_transport()
+    #ssh.connect()
+    '''
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        s.connect('192,168,20,223','22')
+        return True
+    except:
+        return False
+    '''
 
 account_sid = "AC6b1f1bccd018165f0c10dd7de6a4a30d"
 auth_token = "9297c36a3df5de99f27583112d74ee00"
@@ -54,7 +102,7 @@ Grid.columnconfigure(win,4,weight =1)
 
 Grid.rowconfigure(win,5,weight =1)
 Grid.columnconfigure(win,5,weight =1)
-ctemp = ttk.Label(win, text="NA \u2103", font = LARGE_FONT,   foreground = 'red')
+ctemp = ttk.Label(win, text=("NA " + u'\N{DEGREE SIGN}' + 'C'), font = LARGE_FONT,   foreground = 'red')
 ctemp.grid(column=0, row=0)
 
 #initial bounds of the graph
@@ -75,6 +123,7 @@ for i in range(len(y)):
 fileData.write("-100\n-100\n-100\n")
 fileData.close()
 '''
+downloadData('savedData.txt')
 y = np.loadtxt('savedData.txt',unpack=True)
 fileData = open('savedData.txt','w')
 for i in range (len(y)):
@@ -90,30 +139,24 @@ fileData.close()
 fileLED = open('checkbutton.txt','w')
 fileLED.write("False")
 fileLED.close()
+sendData('checkbutton.txt')
 
 
-#code to test adding random data to the file
-'''
-def addToFile(y):
-    file = open('datafile.txt','w')
-    file.write(str(random.randint(10,50)))
-    file.write('\n')
-    for i in range(len(y)):
-        #print(y[i])
-        file.write(str(y[i]))
-        file.write('\n')
-    file.close()
-'''
+    
+#timestamp    
 def getTimeDifference():
     currentTime = time.time()
+    downloadData('time.txt')
     fileTime = np.loadtxt('time.txt',unpack=True)
     difference = int(currentTime - fileTime)
     return difference
+
+#text message part
 def sendMsg(number, msg):
     client = Client(account_sid, auth_token)
     
     client.api.account.messages.create(
-    to= "+" + number,
+    to= "+1" + number,
     from_="+12252404150",
     body=msg)
 
@@ -134,25 +177,23 @@ def getMin():
 def animate(i):
     #need to deal with possibility of y not being [] (only one val)
     same=False
-    data = open('datafile.txt','r')
+    downloadData('datafile.txt')
+    data = np.loadtxt('datafile.txt',unpack=True)
     #print(data.read())
-    z=data.read()
-    data.flush()
-    data.close()
+    
     #z=data
     #z = np.loadtxt('//192.168.137.192/Public/datafile.txt',unpack=True)
-    print(z)
     y = np.empty(300)
     for i in range (len(lastData)-1):
         y[i+1]=lastData[i]
-    #if(getTimeDifference()>3):
-        #y[0]=-40
-        #same=False
-    #else:
-    y[0]=z
-    same=False
+    if(getTimeDifference()>2 or (not isOpen())):
+        y[0]=-40
+        same=True
+    else:
+        y[0]=data
+        same=False
     #print(y)
-
+    
     #check if data has been updated
      #True
     #for i in range(min(len(y),len(lastData))):
@@ -186,24 +227,16 @@ def animate(i):
          ctemp.configure(text = "no data available")
     elif(y[0] <=-20):
         ctemp.configure(text = "unplugged sensor")
-    elif("\u2109" in switchUnits.cget("text")):
-        ctemp.configure(text = str(y[0]) + "\u2103")
+    elif((u'\N{DEGREE SIGN}' + 'F') in switchUnits.cget("text")):
+        ctemp.configure(text = str(y[0]) + u'\N{DEGREE SIGN}' + 'C')
     else:
-        ctemp.configure(text = str(y[0] * (9.0/5) + 32) + "\u2109")
+        ctemp.configure(text = (str(y[0] * (9.0/5) + 32)[:5]) + u'\N{DEGREE SIGN}' +'F')
         
     
     x = []
     #if more than 300 entries
     if(len(y)>300):
         y = y[0:299]
-        #trim this here or in other program
-        '''
-        fileData = open('datafile.txt','w')
-        for i in range(len(y)):
-            fileData.write(str(y[i]))
-            fileData.write('\n')
-        fileData.close()
-        '''
     #Hold limit zoomed in, but cannot zoom out further than original
     if ax1.get_xlim()[0]<=300:
         xmax=ax1.get_xlim()[0]
@@ -264,15 +297,15 @@ def animate(i):
     #plt.yticks(np.arange(-10,70,10))
     plt.gca().invert_xaxis()
     
-    plt.ylabel('Temperature (\u2103)')
+    plt.ylabel(('Temperature' + u'\N{DEGREE SIGN}' + 'C'))
     plt.title('Thermometer Data')
 
 #changes units from celcius to farenheit and vice versa
 def changeUnits():
-    if("\u2109" in switchUnits.cget("text")):
-       switchUnits.configure(text = "Change to \u2103")
+    if('F' in switchUnits.cget("text")):
+       switchUnits.configure(text = ("Change to" + u'\N{DEGREE SIGN}' + 'C'))
     else:
-       switchUnits.configure(text = "Change to \u2109")
+       switchUnits.configure(text = ("Change to" + u'\N{DEGREE SIGN}' + 'F'))
 
 #changes the LED from being on to off and vice versa
 def toggleLED():
@@ -281,31 +314,36 @@ def toggleLED():
         fileLED = open('checkbutton.txt','w')
         fileLED.write("True")
         fileLED.close()
+        sendData('checkbutton.txt')
     else:
         displayLED.configure(text = "Turn on LEDs", bg = "limegreen")
         fileLED = open('checkbutton.txt','w')
         fileLED.write("False")
         fileLED.close()
+        sendData('checkbutton.txt')
     #do something
 
 #when window is closed
 def closeProgram():
-    if messagebox.askokcancel("Quit", "Do you want to quit?"):
+    if tkMessageBox.askokcancel("Quit", "Do you want to quit?"):
         fileLED = open('checkbutton.txt','w')
         fileLED.write("False")
         fileLED.flush()
         fileLED.close()
+        sendData('checkbutton.txt')
         fileData = open('savedData.txt','w')
         for i in range (len(lastData)):
             fileData.write(str(lastData[i]))
             fileData.write('\n')
         fileData.flush()
         fileData.close()
+        sendData('savedData.txt')
         
         fileTime = open('time.txt','w')
         fileTime.write(str(time.time()))
         fileTime.flush()
         fileTime.close()
+        sendData('time.txt')
         
         win.destroy()
         plt.close()
@@ -315,7 +353,7 @@ def closeProgram():
 maxRange = tk.StringVar()
 maxEntry = ttk.Entry(win,width=3,textvariable = maxRange)
 maxEntry.grid(column=1,row=1)
-maxLabel = ttk.Label(win, text="max temp (\u2103)", font = SMALL_FONT)
+maxLabel = ttk.Label(win, text=("max temp" + u'\N{DEGREE SIGN}' + 'C'), font = SMALL_FONT)
 maxLabel.grid(column=0,row=1)
 maxRangeMessage = tk.StringVar()
 maxMessageEntry = ttk.Entry(win, width = 30, textvariable = maxRangeMessage)
@@ -326,7 +364,7 @@ maxMessageLabel.grid(column=2, row=1)
 minRange = tk.StringVar()
 minEntry = ttk.Entry(win,width=3,textvariable = minRange)
 minEntry.grid(column=1,row=2)
-minLabel = ttk.Label(win, text="min temp (\u2103)",font = SMALL_FONT)
+minLabel = ttk.Label(win, text=("min temp" + u'\N{DEGREE SIGN}' + 'C'),font = SMALL_FONT)
 minLabel.grid(column=0,row=2)
 minRangeMessage = tk.StringVar()
 minMessageEntry = ttk.Entry(win, width = 30, textvariable = minRangeMessage)
@@ -340,18 +378,17 @@ phoneNumberEntry = ttk.Entry(win, width=10,textvariable=phoneNumber)
 phoneNumberEntry.grid(column=1,row=3)
 phoneLabel = ttk.Label(win, text="phone number",  font = SMALL_FONT)
 phoneLabel.grid(column = 0, row = 3)
-
-switchUnits = Button(win, text = "Change to \u2109",command = changeUnits, height = 2, width = 10)
+switchUnits = Button(win, text = ("Change to" + u'\N{DEGREE SIGN}' + "F"),command = changeUnits, height = 2, width = 10)
 switchUnits.grid(column=2, row=0)
 
 displayLED = Button(win, text = "Turn on LEDs",command = toggleLED, bg = "limegreen", height = 2, width = 10)
 displayLED.grid(column=1, row=4)
 
-
 fig = plt.figure("Thermometer Graph")
+downloadData('savedData.txt')
 savedData = np.loadtxt('savedData.txt',unpack=True)
 difference = getTimeDifference()
-print(difference)
+#print(difference)
 lastData = np.empty(300)
 
 if getTimeDifference()>3:
@@ -363,7 +400,6 @@ if getTimeDifference()>3:
 else:
     for i in range (299):
         lastData[i]=savedData[i] 
-
 
 #lastData = np.empty(300)
 #lastData.fill(-40)

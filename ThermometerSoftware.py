@@ -25,50 +25,56 @@ import time
 import paramiko
 import socket
 
-#Sending data from PC to raspberry Pi, change ip and port as necessary
+
+connected = False # if connected to paramiko
+t = paramiko.Transport('169.254.154.179','22') #change ip and port 
+
+#Sending data from PC to raspberry Pi
 def sendData(fileName):
     if isOpen():
-        t = paramiko.Transport('169.254.154.179','22')
-        t.connect(username = 'pi', password = '123')
-        sftp = paramiko.SFTPClient.from_transport(t)
-        remotepath=fileName
-        local = "C:\\Users\\yangw\\Documents\\SD\\test\\"
-        localpath= (local + fileName)
-        sftp.put(localpath,remotepath)
-        t.close()
+        #t = paramiko.Transport('169.254.154.179','22')
+        #t.connect(username = 'pi', password = '123')
+        try:
+            sftp = paramiko.SFTPClient.from_transport(t)
+            remotepath=fileName
+            local = "C:\\Users\\yangw\\Documents\\SD\\test\\"
+            localpath= (local + fileName)
+            sftp.put(localpath,remotepath)
+        except:
+            connected=False
+        #t.close()
 
-#Downloading data from raspberry Pi to PC, change the ip and port as necessary
+#Downloading data from raspberry Pi to PC
 def downloadData(fileName):
     if isOpen():
-        t = paramiko.Transport('169.254.154.179','22')
-        t.connect(username = 'pi', password = '123')
-        sftp = paramiko.SFTPClient.from_transport(t)
-        remotepath=fileName
-        local = 'C:\\Users\\yangw\\Documents\\SD\\test\\'
-        localpath= (local + fileName)
-        sftp.get(remotepath, localpath)
-        t.close()
+        #t = paramiko.Transport('169.254.154.179','22')
+        #t.connect(username = 'pi', password = '123')
+        try:
+            sftp = paramiko.SFTPClient.from_transport(t)
+            remotepath=fileName
+            local = 'C:\\Users\\yangw\\Documents\\SD\\test\\'
+            localpath= (local + fileName)
+            sftp.get(remotepath, localpath)
+        except:
+            connected=False
+        #t.close()
     
 def isOpen():
-    try:
-        t = paramiko.Transport('169.254.154.179','22')
-        t.connect(username = 'pi', password = '123')
+    if connected==False:
+        try:
+            #t = paramiko.Transport('169.254.154.179','22')
+            t.connect(username = 'pi', password = '123')
+            connected = True
+            return True
+        except:
+            return False
+    else:
         return True
-    except:
-        return False
-    #transport = client.get_transport()
-    #ssh.connect()
-    '''
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    try:
-        s.connect('192,168,20,223','22')
-        return True
-    except:
-        return False
-    '''
 
 account_sid = "AC6b1f1bccd018165f0c10dd7de6a4a30d"
 auth_token = "9297c36a3df5de99f27583112d74ee00"
+
+connected = isOpen() #check if open
 
 LARGE_FONT = "Vernada", 20
 
@@ -105,7 +111,7 @@ Grid.columnconfigure(win,5,weight =1)
 ctemp = ttk.Label(win, text=("NA " + u'\N{DEGREE SIGN}' + 'C'), font = LARGE_FONT,   foreground = 'red')
 ctemp.grid(column=0, row=0)
 
-#initial bounds of the graph
+#initial bounds of the graph according to requirements
 xmax=300
 xmin=0
 ymax=50
@@ -114,15 +120,6 @@ ymin=10
 
 #make sure the data file is not empty, or may cause an error
 #do so by padding end of file
-'''
-y = np.loadtxt('datafile.txt',unpack=True)
-fileData = open('datafile.txt','w')
-for i in range(len(y)):
-    fileData.write(str(y[i]))
-    fileData.write('\n')
-fileData.write("-100\n-100\n-100\n")
-fileData.close()
-'''
 downloadData('savedData.txt')
 y = np.loadtxt('savedData.txt',unpack=True)
 fileData = open('savedData.txt','w')
@@ -135,7 +132,6 @@ for i in range (300-len(y)):
 fileData.close()
 
 #load LED file initially with LED off when program starts
-
 fileLED = open('checkbutton.txt','w')
 fileLED.write("False")
 fileLED.close()
@@ -143,7 +139,7 @@ sendData('checkbutton.txt')
 
 
     
-#timestamp    
+#difference between current time and saved timestamp    
 def getTimeDifference():
     currentTime = time.time()
     downloadData('time.txt')
@@ -174,8 +170,8 @@ def getMin():
     else:
         return int(minRange.get())
 
+#graphing part
 def animate(i):
-    #need to deal with possibility of y not being [] (only one val)
     same=False
     downloadData('datafile.txt')
     data = np.loadtxt('datafile.txt',unpack=True)
@@ -240,7 +236,7 @@ def animate(i):
     index=0
     brk = False
     while i < (len(y)):
-        #or whatever condition signifying no data
+        #condition signifying no data
         if y[i] >=-20: 
             if(brk == True):
                 brk = False
@@ -262,11 +258,8 @@ def animate(i):
     minLine = np.empty(300)
     minLine.fill(getMin())
     x1 = np.arange(len(maxLine))
-    
-    
+       
     plt.xlabel('seconds ago from the current time')
-
-    
 
     ax1.plot(x,y,color='C0')
     ax1.plot(x1,maxLine,color='red')
@@ -299,7 +292,6 @@ def toggleLED():
         fileLED.write("False")
         fileLED.close()
         sendData('checkbutton.txt')
-    #do something
 
 #when window is closed
 def closeProgram():
@@ -378,8 +370,6 @@ else:
     for i in range (299):
         lastData[i]=savedData[i] 
 
-#lastData = np.empty(300)
-#lastData.fill(-40)
 ax1 = fig.add_subplot(1,1,1)
 
 plt.axis([xmin,xmax,ymin,ymax])

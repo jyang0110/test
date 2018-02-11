@@ -25,10 +25,10 @@ import time
 import paramiko
 import socket
 
-#Sending data from PC to raspberry Pi
+#Sending data from PC to raspberry Pi, change ip and port as necessary
 def sendData(fileName):
     if isOpen():
-        t = paramiko.Transport('192.168.20.223','22')
+        t = paramiko.Transport('169.254.154.179','22')
         t.connect(username = 'pi', password = '123')
         sftp = paramiko.SFTPClient.from_transport(t)
         remotepath=fileName
@@ -37,10 +37,10 @@ def sendData(fileName):
         sftp.put(localpath,remotepath)
         t.close()
 
-#Downloading data from raspberry Pi to PC
+#Downloading data from raspberry Pi to PC, change the ip and port as necessary
 def downloadData(fileName):
     if isOpen():
-        t = paramiko.Transport('192.168.20.223','22')
+        t = paramiko.Transport('169.254.154.179','22')
         t.connect(username = 'pi', password = '123')
         sftp = paramiko.SFTPClient.from_transport(t)
         remotepath=fileName
@@ -51,7 +51,7 @@ def downloadData(fileName):
     
 def isOpen():
     try:
-        t = paramiko.Transport('192.168.20.223','22')
+        t = paramiko.Transport('169.254.154.179','22')
         t.connect(username = 'pi', password = '123')
         return True
     except:
@@ -179,38 +179,18 @@ def animate(i):
     same=False
     downloadData('datafile.txt')
     data = np.loadtxt('datafile.txt',unpack=True)
-    #print(data.read())
-    
-    #z=data
-    #z = np.loadtxt('//192.168.137.192/Public/datafile.txt',unpack=True)
+
     y = np.empty(300)
     for i in range (len(lastData)-1):
         y[i+1]=lastData[i]
-    if(getTimeDifference()>2 or (not isOpen())):
+    if (data>65): #data out of range
+        y[0]=-100
+    if(getTimeDifference()>0 or (not isOpen())):
         y[0]=-40
         same=True
     else:
         y[0]=data
         same=False
-    #print(y)
-    
-    #check if data has been updated
-     #True
-    #for i in range(min(len(y),len(lastData))):
-     #   if lastData[i]!=y[i]:
-      #      same=False
-            
-    #if hasn't been updated shift everything by one
-    '''
-    if(same):
-        fileData = open('datafile.txt','w')
-        fileData.write("-100\n")
-        for i in range(len(y)):
-            fileData.write(str(y[i]))
-            fileData.write('\n')
-        fileData.close()
-        y = np.loadtxt('datafile.txt',unpack=True)
-    '''
     #copy back over
     for i in range(min(len(y),len(lastData))):
         lastData[i]=y[i]
@@ -293,8 +273,6 @@ def animate(i):
     ax1.plot(x1,minLine,color='red')
     
     plt.axis([xmin,xmax,ymin,ymax])
-    #plt.xticks(np.arange(0,350,50))
-    #plt.yticks(np.arange(-10,70,10))
     plt.gca().invert_xaxis()
     
     plt.ylabel(('Temperature' + u'\N{DEGREE SIGN}' + 'C'))
@@ -388,7 +366,6 @@ fig = plt.figure("Thermometer Graph")
 downloadData('savedData.txt')
 savedData = np.loadtxt('savedData.txt',unpack=True)
 difference = getTimeDifference()
-#print(difference)
 lastData = np.empty(300)
 
 if getTimeDifference()>3:
@@ -408,7 +385,8 @@ ax1 = fig.add_subplot(1,1,1)
 plt.axis([xmin,xmax,ymin,ymax])
 plt.gca().invert_xaxis()
 
-ani = animation.FuncAnimation(fig,animate,interval=1000)
+computerFactor=900 #how slow the computer is
+ani = animation.FuncAnimation(fig,animate,interval=1000-computerFactor) #update once a second
 win.protocol("WM_DELETE_WINDOW",closeProgram)
 plt.show()
 

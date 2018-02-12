@@ -1,13 +1,21 @@
-This sofware must be run on python version 2.7. The following are instructions
-on how do download the necessary libraries:
-Matplotlib:
-Tkinter:
-Paramiko:
-Twilio:
+Pre-requirements:
+1. Make sure you have python 2.7.9+ version of python 2.7 installed. To check your version, type python --v.
+   If you dont know how to do command line, throw this instruction away.
+2. Make sure you have node installed. Type node in your command line to test.
 
-Note: The IP address and port are set to the IP address and port of the
-prototype. They need to be changed to the IP address and port of your the
-Raspberry PI device.
+Library Instillation Instructions:
+1. First, unzip the files. Navigate to the folder path in the command line.
+2. Type pip intall matplotlib. This will install matplotlib. Some python have matplotlib with the package.
+3. To install twilio, do pip install twillio. If you get a permission denied error, do sudo pip install twillio.
+4. Type import Tkinter for python2.7 IDLE. If there is an error, type pip intall Tkinter in the command line.
+5. Paramiko is a package for data transftering. To use Paramiko, we first need to use pycrypto.
+	To get a complete package for pycrypto, go to http://www.voidspace.org.uk/python/modules.shtml#pycrypto. 
+		And download the appropriate version of PyCrypto.
+	Unzip the file. Nevigate to the path of where the unzipped file is, do pyton setup.py install
+6. Now you can do pip install paramiko in a command line.
+
+Note: The IP address and port in TemperatureSoftware.py are set to the IP address and port 
+of the prototype. They need to be changed to the IP address and port of your Raspberry PI device.
 
 Instructions on how to run:
 First make sure python is set as an environmental variable. Then navigate to

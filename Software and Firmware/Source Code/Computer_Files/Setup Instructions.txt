@@ -1,0 +1,18 @@
+This sofware must be run on python version 2.7. The following are instructions
+on how do download the necessary libraries:
+Matplotlib:
+Tkinter:
+Paramiko:
+Twilio:
+
+Note: The IP address and port are set to the IP address and port of the
+prototype. They need to be changed to the IP address and port of your the
+Raspberry PI device.
+
+Instructions on how to run:
+First make sure python is set as an environmental variable. Then navigate to
+the Computer_Files directory in the command line. Once there simply type
+python ThermometerSoftware.py to run the code. Alternatively you can run the
+code in a different directory by providing the full path of ThermometerSoftware.py.
+
+

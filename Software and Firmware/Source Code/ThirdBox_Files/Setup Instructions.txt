@@ -1,0 +1,12 @@
+This sofware must be run on a Raspberry PI device. The following are instructions
+on how do download the necessary libraries:
+
+
+Note: The IP address and port are set to the IP address and port of the
+prototype. They need to be changed to the IP address and port of your the
+Raspberry PI device.
+
+Instructions on how to run:
+
+
+

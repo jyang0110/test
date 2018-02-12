@@ -1,0 +1,6 @@
+The following parts are needed:
+
+- A tv/display with an HDMI input port
+- A HDMI cable 
+- A computer with an aethernet port or the necessary aethernet adapter
+- A Raspberry PI

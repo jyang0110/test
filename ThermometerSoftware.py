@@ -7,8 +7,6 @@
 #tkinter documentation, matplotlib documentation
 #other basic python guides and various stackoverflow posts
 
-
-
 import Tkinter as tk
 import ttk
 import matplotlib.pyplot as plt
@@ -25,12 +23,14 @@ import time
 import paramiko
 import socket
 
+#not connected
 
-connected = False # if connected to paramiko
-t = paramiko.Transport('169.254.154.179','22') #change ip and port 
+connected = False
+
 
 #Sending data from PC to raspberry Pi
 def sendData(fileName):
+    global t
     if isOpen():
         #t = paramiko.Transport('169.254.154.179','22')
         #t.connect(username = 'pi', password = '123')
@@ -46,6 +46,7 @@ def sendData(fileName):
 
 #Downloading data from raspberry Pi to PC
 def downloadData(fileName):
+    global t
     if isOpen():
         #t = paramiko.Transport('169.254.154.179','22')
         #t.connect(username = 'pi', password = '123')
@@ -60,21 +61,24 @@ def downloadData(fileName):
         #t.close()
     
 def isOpen():
+    global connected,t
     if connected==False:
         try:
-            #t = paramiko.Transport('169.254.154.179','22')
+            t = paramiko.Transport('169.254.154.179','22')
             t.connect(username = 'pi', password = '123')
-            connected = True
-            return True
         except:
+            connected = False
             return False
-    else:
-        return True
+    connected = True
+    return True
 
 account_sid = "AC6b1f1bccd018165f0c10dd7de6a4a30d"
 auth_token = "9297c36a3df5de99f27583112d74ee00"
 
-connected = isOpen() #check if open
+
+#check if open
+connected = isOpen()
+
 
 LARGE_FONT = "Vernada", 20
 
@@ -181,7 +185,7 @@ def animate(i):
         y[i+1]=lastData[i]
     if (data>65): #data out of range
         y[0]=-100
-    if(getTimeDifference()>0 or (not isOpen())):
+    elif(getTimeDifference()>0 or (not isOpen())):
         y[0]=-40
         same=True
     else:
@@ -375,7 +379,7 @@ ax1 = fig.add_subplot(1,1,1)
 plt.axis([xmin,xmax,ymin,ymax])
 plt.gca().invert_xaxis()
 
-computerFactor=900 #how slow the computer is
+computerFactor=200 #how slow the computer is
 ani = animation.FuncAnimation(fig,animate,interval=1000-computerFactor) #update once a second
 win.protocol("WM_DELETE_WINDOW",closeProgram)
 plt.show()

@@ -1,17 +1,18 @@
 The following parts are needed:
 
-- A tv/display with an HDMI input port
+- A tv/display with an HDMI input port 
 - A HDMI cable 
-- A computer with an aethernet port or the necessary aethernet adapter
+- A computer with an aethernet port (or another port with the necessary aethernet adapter)
 - A Raspberry PI 3B
 - A Ethernet Cable (3feet)
 - A 5V 2.5A Raspberry Pi 3 Power Supply
 - A Mini Breadboard 5.5×8.2×0.85cm
-- Seven Red LED light
+- Seven Red LEDs
 - Seven 330 Ohms resistor
 - A 4.7k Ohms resistor
 - Breadboard Jumper Wires
-- A power switch and push botton for breadboard
+- A power switch (must be easy to connect to breadboard. See schematic)
+- A push button (must be easy to connect to breadboard. See schematic)
 - A Vktech 2M Waterproof Digital Temperature Temp Sensor Probe (DS18b20)
 - Sticky-Back Fastener Tape
-- A 24.5 * 15.5 * 6 cm paparboard box
+- A 24.5 * 15.5 * 6 cm cardboard box

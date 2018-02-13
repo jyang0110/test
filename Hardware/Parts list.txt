@@ -3,4 +3,12 @@ The following parts are needed:
 - A tv/display with an HDMI input port
 - A HDMI cable 
 - A computer with an aethernet port or the necessary aethernet adapter
-- A Raspberry PI
+- A Raspberry PI 3B
+- A Ethernet Cable (3feet)
+- A 5V 2.5A Raspberry Pi 3 Power Supply
+- A Mini Breadboard 5.5×8.2×0.85cm
+- Seven Red LED light
+- Seven 330 Ohms resistor
+- A 4.7k Ohms resistor
+- Breadboard Jumper Wires
+- A power switch and push botton for breadboard

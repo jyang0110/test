@@ -1,5 +1,11 @@
-This sofware must be run on a Raspberry PI device. The following are instructions
-on how do download the necessary libraries:
+This sofware must be run on a Raspberry PI 3B device. 
+
+Pre-requirements:
+1. Make sure you have newest version of NOOBS installed in your RaspberryPi 3B. You can purchase a pre-installed NOOBS SD card from many retailers, or download NOOBS at the link below: https://www.raspberrypi.org/downloads/noobs/ and follow the software setup guide here: https://www.raspberrypi.org/learning/software-guide/
+2. Make sure you install the Raspbian system with NOOBS.
+
+The following are instructions on how do download the necessary libraries:
+1. the 
 
 
 Note: The IP address and port are set to the IP address and port of the

@@ -12,3 +12,4 @@ The following parts are needed:
 - A 4.7k Ohms resistor
 - Breadboard Jumper Wires
 - A power switch and push botton for breadboard
+- A Vktech 2M Waterproof Digital Temperature Temp Sensor Probe (DS18b20)

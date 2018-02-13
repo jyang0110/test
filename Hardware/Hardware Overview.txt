@@ -1,5 +1,5 @@
-This is an overview of how the hardware works. The third box design is split into three parts: The box design, the breadboard design and the appropriate setup for RaspberryPi.
-Please see the assembly instruction and drawings for how they fit together. A top-level parts list shows all parts needed for the third box design.
+This is an overview of how the hardware works. The third box design is split into three parts: The box design, the breadboard design and the setup for RaspberryPi.
+Please see the assembly instruction for how they fit together. Also a top-level parts list shows all parts needed for this design.
 
 1. Box design:
 We use a xx * xx paperboard box for our third box.

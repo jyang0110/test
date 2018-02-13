@@ -1,0 +1,5 @@
+This is an overview of how hardware works.
+
+We use RespberryPi 3B for our main controller of the third box, and breadboard for LED display.
+The RespberryPi will output the singal by GPIO to control the LED. The sensor connected by 4.7k Ohms resistor to a 3.3V and a GPIO.
+Also we use GPIO to ciontrol the power switch and push button.

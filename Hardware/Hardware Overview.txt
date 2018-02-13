@@ -1,4 +1,4 @@
-This is an overview of how the hardware works. There are three parts of the third box hardware design.
+This is an overview of how the hardware works. There are three parts of the third box hardware design. Please see the Assembly drawings for how they fit together and A top-level parts list to see all parts needed for the third box design.
 
 1. Box design:
 We use a xx * xx paperboard box for our third box.

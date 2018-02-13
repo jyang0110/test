@@ -12,9 +12,5 @@ We design the push button and the power switch in the breadboard, but for user's
 See the Schematics of breadboard for more information.
 
 3. Setup of RaspberryPi:
-We use RespberryPi 3B for our main controller of the third box, 
-Firstly, connect the Ethernet cable to the laptop used for user interface.
-Connect the power supply calbe to 120V and 60 Hz power supply.
-Connect the HDMI cable to a screen.(with keyboard and mouse if needed)
-Connect GPIO output to breadboard. (See the assembly instruction for more details)
-we use GPIO output GPIO 21,20,26,19,13,6,5 for LED display and GPIO inpit 23 for push button and GPOI 24 for power switch.
+We use RespberryPi 3B for our main controller of the third box. For data tranmisson, connect the Ethernet cable between your laptop (used for user interface) and the RaspberryPi. Also, connect the power supply calbe of RaspberryPi to 120V and 60 Hz power supply (USA). Then connect the HDMI cable to a screen (with keyboard and mouse if needed). For RaspberryPi software setup, we need to install paramiko for data tranmisson between user interface and RespberryPi. More information is given in the insturction.
+We use GPIO 21,20,26,19,13,6,5 for LED display and GPIO inpit 23 for push button and GPOI 24 for power switch. Connect GPIO output to breadboard. (See the assembly instruction for more details)

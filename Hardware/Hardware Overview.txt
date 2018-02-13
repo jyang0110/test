@@ -1,14 +1,14 @@
 This is an overview of how the hardware works. The third box design is split into three parts: The box design, the breadboard design and the setup for RaspberryPi.
-Please see the assembly instruction for how they fit together. Also a top-level parts list shows all parts needed for this design.
+Please see the assembly instruction for how they fit together. Also a top-level parts list shows all parts required for this design.
 
 1. Box design:
-We use a xx * xx paperboard box for our third box. To avoid damage during dropping or flapping, using bubble warp to stick inside and outside of the paperboard box. Also, using stickt back fastener tape to fasten the breadboard and RespberryPi inside the box to avoid collision damage. In addition, cut the appropriate size of holes for power switch, push button, power supply cable, Ethernet cable, LED dsiplay. Then gluing the power swithch and push button on the hole. For easy update and repair, using stickt back fastener tape to open and close the box.
+We use a xx * xx * xx paperboard box for our third box. To avoid damage during dropping or flapping, using bubble warp to stick inside and outside of the paperboard box. Also, using stickt back fastener tape to fasten the breadboard and RespberryPi inside the box to avoid collision damage. In addition, cut the appropriate size of holes for power switch, push button, power supply cable, Ethernet cable, LED dsiplay. Then gluing the power swithch and push button in the hole. For easy update and repair, using stickt back fastener tape to open and close the box.
 
 2. The breadboard Design:
 Breadboard deisgn is design for LED display and necessary connection betwwen raspberryPi and the control button/temperature sensor.
-There are seven red LEDs in the breadboard and connect with seven of 330 Ohms resistor. And then one side connect to the ground in the breadboard and another side connect to the RaspberryPi GPIO headers.
-The temperature sensor is also pluged into the breadboard and connect with a 4.7k Ohms resistor. There are three ports of the temperature, one is to the gournd, and another is to the RaspberryPi 3.3V power supply, and another is to the RaspberryPi GPIO headers.
-We design the push button and the power switch in the breadboard, but for user's convenience, we put them outside of the box and connect to gound and RaspberryPi GPIO headers.
+There are seven red LEDs in the breadboard and connect with seven of 330 Ohms resistor. And then one port connect to the ground in the breadboard and another port connect to the RaspberryPi GPIO headers.
+The temperature sensor is also pluged into the breadboard and connect with a 4.7k Ohms resistor. There are three ports of the temperature sensor, one is to the gournd, another is to the RaspberryPi 3.3V power supply, and the last one is to the RaspberryPi GPIO headers.
+We orginally design to install push button and the power switch in the breadboard, but for user's convenience, we put them outside of the box and connect to gound and RaspberryPi GPIO headers.
 See the Schematics of breadboard for more information.
 
 3. Setup of RaspberryPi:

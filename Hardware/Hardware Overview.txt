@@ -1,18 +1,21 @@
-This is an overview of how the hardware works. There are three parts of the third box hardware design. Please see the Assembly drawings for how they fit together and A top-level parts list to see all parts needed for the third box design.
+This is an overview of how the hardware works. There are three parts of the third box hardware design. 
+Please see the Assembly drawings for how they fit together and A top-level parts list to see all parts needed for the third box design.
 
 1. Box design:
 We use a xx * xx paperboard box for our third box.
 Firstly, for put xxx inside and outside of the box.
-Secondly, for fix the breadboard and RespberryPi, using Velcro.
-Thirdly, for power switch, push button, power supply cable, Ethernet cable, LED dsiplay
-Fourthly, for power swithch and push button, gluing to the 
+Secondly, for fix the breadboard and RespberryPi, using sticky back.
+Thirdly, cut the appropriate size of hole for power switch, push button, power supply cable, Ethernet cable, LED dsiplay
+Fourthly, for power swithch and push button, gluing to the.
 Finally, for easy modifiy and repair, use Velcro very easy to open and close.
 
 2. The breadboard Design:
-Breadboard for LED display.
+Breadboard is design for LED display.
 The RespberryPi will output the singal by GPIO to control the LED. The sensor connected by 4.7k Ohms resistor to a 3.3V and a GPIO.
 Also we use GPIO to ciontrol the power switch and push button.
+See the Schematics of breadboard for more information.
 
 3. The RaspberryPi:
 We use RespberryPi 3B for our main controller of the third box, 
 we use GPIO output GPIO 21,20,26,19,13,6,5 for LED display and  and GPIO inpit 23 for push button and GPOI 24 for power switch.
+See the Assembly drawings to connect the breadboard and raspberryPi.

@@ -19,16 +19,14 @@ GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def read_temp():
-    #Engine_check = os.path.isfile("/sys/bus/w1/devices/28-031724d850ff/w1_slave")
-    Engine_check = os.path.isfile("/sys/bus/w1/devices/28-04170338c2ff/w1_slave") 
+    Engine_check = os.path.isfile("/sys/bus/w1/devices/28-031724d850ff/w1_slave")
     if Engine_check is True:
-        check_file = open("/sys/bus/w1/devices/28-04170338c2ff/w1_slave")
+        check_file = open("/sys/bus/w1/devices/28-031724d850ff/w1_slave")
         pre_check = check_file.read()
         firstline = pre_check.split("\n")[0]
         checkdata = firstline.split(" ")[11]
     if Engine_check is True and checkdata == 'YES' and (GPIO.input(24) == 0):
-        #tfile = open("/sys/bus/w1/devices/28-031724d850ff/w1_slave")
-        tfile = open("/sys/bus/w1/devices/28-04170338c2ff/w1_slave")
+        tfile = open("/sys/bus/w1/devices/28-031724d850ff/w1_slave")
         text = tfile.read()
         tfile.close()
         secondline = text.split("\n")[1]
@@ -144,4 +142,3 @@ def read_temp():
 
 while True:
     print(read_temp())
-    #time.sleep(1)

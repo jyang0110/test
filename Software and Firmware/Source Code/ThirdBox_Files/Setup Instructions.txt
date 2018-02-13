@@ -9,7 +9,7 @@ Pre-requirements:
 6. No libraries need to be installed in this software. 
 
 Instructions on how to run:
-
-
+1. Make sure you have these five files in your folder: RaspberrypiSoftware.py, time.txt, savedData.txt, datafile.txt, checkbutton.txt
+2. 
 
 

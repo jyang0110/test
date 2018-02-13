@@ -5,8 +5,9 @@ Please see the assembly instruction for how they fit together. Also a top-level 
 We use a xx * xx paperboard box for our third box. To avoid damage during dropping or flapping the box, using bubble warp to stick inside and outside of the paperboard box. Also, using stickt back Fastener tape to fasten the breadboard and RespberryPi inside the box. In addition, cut the appropriate size of hole for power switch, push button, power supply cable, Ethernet cable, LED dsiplay. Then gluing the power swithch and push button on the hole you cut before. For easy modifiy and repair, use stickt back Fastener tape at the front of the box very easy to open and close.
 
 2. The breadboard Design:
-Breadboard is design for LED display.
-The RespberryPi will output the singal by GPIO to control the LED. The sensor connected by 4.7k Ohms resistor to a 3.3V and a GPIO.
+Breadboard is design for LED display and connection betwwen raspberryPi and the push button/power switch.
+The sensor connected by 4.7k Ohms resistor to a 3.3V and a GPIO. And seven of 330 Ohms resistor to connect LEDs.
+The RespberryPi will output the singal by GPIO to control the LED.
 Also we use GPIO to ciontrol the power switch and push button.
 See the Schematics of breadboard for more information.
 
@@ -16,4 +17,4 @@ Firstly, connect the Ethernet cable to the laptop used for user interface.
 Connect the power supply calbe to 120V and 60 Hz power supply.
 Connect the HDMI cable to a screen.(with keyboard and mouse if needed)
 Connect GPIO output to breadboard. (See the assembly instruction for more details)
-we use GPIO output GPIO 21,20,26,19,13,6,5 for LED display and  and GPIO inpit 23 for push button and GPOI 24 for power switch.
+we use GPIO output GPIO 21,20,26,19,13,6,5 for LED display and GPIO inpit 23 for push button and GPOI 24 for power switch.

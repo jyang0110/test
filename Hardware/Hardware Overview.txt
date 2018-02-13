@@ -1,17 +1,32 @@
-This is an overview of how the hardware works. The third box design is split into three parts: The box design, the breadboard design and the setup for RaspberryPi.
-Please see the assembly instruction for how they fit together. Also a top-level parts list shows all parts required for this design.
+This is an overview of how the hardware works. The third box design is split into three parts: 
+The box design, the breadboard design and the setup for RaspberryPi.
+Please see the assembly instruction for how they fit together. Also a top-level parts list 
+contains all parts required for this design.
 
 1. Box design:
-We use a A 24.5 * 15.5 * 6 cm paperboard box for our third box. To avoid damage during dropping and flapping, using bubble warp to stick inside and outside of the paperboard box. Also, using stickt back fastener tape to fasten the breadboard and RespberryPi inside the box to avoid collision damage. In addition, cut the appropriate size of holes for power switch, push button, power supply cable, Ethernet cable and LED dsiplay. Then gluing the power swithch and push button in the hole. For easy update and repair, using stickt back fastener tape to open and close the box.
+We use a A 24.5 * 15.5 * 6 cm paperboard box for our third box. To avoid damage during dropping 
+and flapping, stick bubble wrap inside and outside of the paperboard box. Also, use velcro to 
+fasten the breadboard and RespberryPi inside the box to avoid collision damage. 
+In addition, cut the appropriate size of holes for power switch, push button, power supply cable, 
+Ethernet cable and LED dsiplay. Then glue the power switch and push button in the hole. For easy 
+update and repair, using velcro to open and close the box.
 
 2. The breadboard Design:
-Breadboard deisgn is design for LED display and necessary connection betwwen raspberryPi and the control button/temperature sensor.
-There are seven red LEDs in the breadboard and connect with seven of 330 Ohms resistor. The negative terminal is connect to the ground in the breadboard and the positive terminal is connect to the RaspberryPi GPIO headers.
-The temperature sensor is also pluged into the breadboard and connect with a 4.7k Ohms resistor. There are three terminals of the temperature sensor, one is connect to the gournd, another is connect to the RaspberryPi 3V3 power supply, and the last one is connect to the RaspberryPi GPIO header.
-Also, a GROUND from GPIO headers shoube be connect to the negative bus of the breadboard. 
-We orginally design to install the push button and the power switch in the breadboard, but for user's convenience, we put them outside of the box and connect to gound and RaspberryPi GPIO headers.
+Breadboard design is the design for LED display and necessary connection betwwen raspberryPi and the 
+control button/temperature sensor. There are seven red LEDs in the breadboard connected with seven 330 Ohms 
+resistors (1 per LED). The negative terminal is connected to the ground in the breadboard and the positive terminal 
+is connected to the RaspberryPi GPIO headers.
+The temperature sensor is also plugged into the breadboard and connected with a 4.7k Ohms resistor. There are three 
+terminals of the temperature sensor, one is connected to the ground, another is connected to the RaspberryPi 3V3 power
+supply, and the last one is connected to the RaspberryPi GPIO header.
+Also, a GROUND from GPIO headers should be connected to the negative bus of the breadboard. 
+We orginally designed to install the push button and the power switch in the breadboard, but for user's convenience, 
+we put them outside of the box and connected them to ground and ther RaspberryPi GPIO headers.
 See the Schematics of breadboard for more information.
 
 3. Setup of RaspberryPi:
-We use RespberryPi 3B for our main controller of the third box. For data tranmisson, connect the Ethernet cable between your laptop (used for user interface) and the RaspberryPi. Also, connect the power supply calbe of RaspberryPi to 120V and 60 Hz power supply (USA). Then connect the HDMI cable to a screen (with keyboard and mouse if needed).
-For GPIO headers, we use GPIO 21,20,26,19,13,6,5 for LED display and GPIO 23 for push button control and GPOI 24 for power switch control.  Finnally, connect the GPIO output to breadboard. (See the assembly instruction for more details)
+We used RaspberryPi 3B for our main controller of the third box. For data tranmisson, connect the Ethernet cable between 
+your laptop (used for user interface) and the RaspberryPi. Also, connect the power supply calbe of RaspberryPi to 120V 
+and 60 Hz power supply (USA). Then connect the HDMI cable to a screen (with keyboard and mouse if needed).
+For GPIO headers, we used GPIO 21,20,26,19,13,6,5 for LED display and GPIO 23 for push button control and GPIO 24
+for power switch control.  Finnally, connect the GPIO output to breadboard. (See the assembly instruction for more details)

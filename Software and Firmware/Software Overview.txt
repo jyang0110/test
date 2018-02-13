@@ -7,9 +7,9 @@ computer files are in thefolder inside of the Source Code folder Computer_Files.
 Inside each folder there are instructions on how to setup up and run the 
 respective software.
 
-The code in file tem.py in the ThirdBox_Files folder measures the temperature 
+The code in file RaspberrypiSoftware.py in the ThirdBox_Files folder measures the temperature 
 and sends the data to the computer for viewing by writing to the txt files 
-included in the folder. See comments in tem.py
+included in the folder. See comments in RaspberrypiSoftware.py
 
 The code in file ThermometerSoftware.py in Computer_Files folder reads the data
 in the txt files to display a graph and a gui for viewing the data on a
@@ -22,24 +22,24 @@ places. Below is the purpose of each "shared" file:
 
 checkbutton.txt: This file contains either the string True or False. If
 the file contains True the LEDs will display the temperature in binary when
-tem.py is run on the raspberry pi. This file is updated by ThermometerSoftware.py
-to virtually push the button.
+RaspberrypiSoftware.py is run on the raspberry pi. This file is updated by 
+ThermometerSoftware.py to virtually push the button.
 
 datafile.txt: This file contains a single float. This float is the last
-data measurement. When the Raspberry PI is on and tem.py is running, the current
-thermometer will be written to the file and updated with new data every second.
+data measurement. When the Raspberry PI is on and RaspberrypiSoftware.py is running,
+the current thermometer will be written to the file and updated with new data every second.
 ThermometerSoftware.py reads the data measurement from the file to plot the graph
 and display the current temperature.
 
 savedData.txt: This file contains several floats. The floats are the history of
-data. The value datafile.txt is updated with by tem.py is also added to this 
-file. To improve speed, ThermometerSoftare.py only interacts with this file 
-when initially ran and when closed. Note: this file must initially have 300+
+data. The value datafile.txt is updated with by RaspberrypiSoftware.py is also 
+added to this file. To improve speed, ThermometerSoftare.py only interacts with 
+this file when initially ran and when closed. Note: this file must initially have 300+
 values for the ThermometerSoftware.py to correctly display the graph. It does
 not matter what they are as long as the timestamp in time.txt is long enough ago
 that the data is too old to be displayed.
 
 time.txt: This file cotains a float. The float is the a timestamp generated using
-the function time.time() from the time libary. tem.py writes the current timestamp
-to the file when running. ThermometerSoftware.py reads this timestamp to determine
-if the Raspberry PI device is on and how old the data is.
+the function time.time() from the time libary. RaspberrypiSoftware.py writes the 
+current timestamp to the file when running. ThermometerSoftware.py reads this 
+timestamp to determine if the Raspberry PI device is on and how old the data is.

@@ -10,6 +10,6 @@ Pre-requirements:
 
 Instructions on how to run:
 1. Make sure you have these five files in your folder: RaspberrypiSoftware.py, time.txt, savedData.txt, datafile.txt, checkbutton.txt
-2. 
+2. Open the Terminal window and simply type python RaspberrypiSoftware.py to run the code.
 
 

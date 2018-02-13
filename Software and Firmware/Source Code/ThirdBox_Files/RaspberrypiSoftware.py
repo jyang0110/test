@@ -1,12 +1,12 @@
 import os
 import glob
-import time
 import RPi.GPIO as GPIO
-import time
 import os.path
 import numpy as np
 import time
 
+#Set up the GPIO input and output
+GPIO input and output
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(21, GPIO.OUT)
 GPIO.setup(20, GPIO.OUT)
@@ -19,6 +19,7 @@ GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def read_temp():
+    #Check the first status of Thermometer sensor
     Engine_check = os.path.isfile("/sys/bus/w1/devices/28-031724d850ff/w1_slave")
     if Engine_check is True:
         check_file = open("/sys/bus/w1/devices/28-031724d850ff/w1_slave")
@@ -26,6 +27,7 @@ def read_temp():
         firstline = pre_check.split("\n")[0]
         checkdata = firstline.split(" ")[11]
     if Engine_check is True and checkdata == 'YES' and (GPIO.input(24) == 0):
+    #Check the status of Thermometer sensor and the status of power switch
         tfile = open("/sys/bus/w1/devices/28-031724d850ff/w1_slave")
         text = tfile.read()
         tfile.close()
@@ -51,7 +53,7 @@ def read_temp():
         open_button = open("/home/pi/checkbutton.txt")
         read_button = open_button.read()
         get_button = read_button.split(" ")[0]
-        if (GPIO.input(23) == 0) or get_button == 'True':
+        if (GPIO.input(23) == 0) or get_button == 'True': #Check the status of push button
             if led_1 == 1:
                 GPIO.output(21, True)
             if led_1 == 0:
@@ -102,7 +104,7 @@ def read_temp():
         dataTime.close()
         return temp_d,temp_b,led_1,led_2,led_3,led_4,led_5,led_6,led_7
     
-    elif (GPIO.input(24) == 1):
+    elif (GPIO.input(24) == 1): #If the power switch is off
         GPIO.output(21, False)
         GPIO.output(20, False)
         GPIO.output(26, False)
@@ -111,7 +113,7 @@ def read_temp():
         GPIO.output(6, False)
         GPIO.output(5, False)
         
-    else:
+    else: #If the temperature sensor is not plugged into the third box, notify the user that there is an error condition
         GPIO.output(21, True)
         GPIO.output(20, True)
         GPIO.output(26, True)

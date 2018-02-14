@@ -185,7 +185,7 @@ def animate(i):
         y[i+1]=lastData[i]
     if (data>65): #data out of range
         y[0]=-100
-    elif(getTimeDifference()>0 or (not isOpen())):
+    elif(getTimeDifference()>2 or (not isOpen())): # Data unavailable
         y[0]=-40
         same=True
     else:
@@ -195,7 +195,7 @@ def animate(i):
     for i in range(min(len(y),len(lastData))):
         lastData[i]=y[i]
     
-    #send txt message
+    #send text message
     if(y[0]>-20 and len(phoneNumber.get())>=10):
         if minRange.get()!='':
             if int(minRange.get())>y[0] and (y[1]>=int(minRange.get()) or y[1]<-20):

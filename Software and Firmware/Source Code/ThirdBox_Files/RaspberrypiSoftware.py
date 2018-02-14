@@ -1,12 +1,13 @@
 import os
 import glob
+import time
 import RPi.GPIO as GPIO
+import time
 import os.path
 import numpy as np
 import time
 
-#Setup the input and output of GPIO
-GPIO input and output
+#Setup the input and output pin of GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(21, GPIO.OUT)
 GPIO.setup(20, GPIO.OUT)
@@ -32,17 +33,17 @@ def read_temp():
         text = tfile.read()
         tfile.close()
         secondline = text.split("\n")[1]
+        #Read the temperature as decimal number
         temperaturedata = secondline.split(" ")[9]
         temp_d = float(temperaturedata[2:])
-        #Read the temperature as decimal number
         temp_d = temp_d / 1000
         #Negative temperatures appear as a binary number in two’s complement on the seven bit display
         if temp_d < 0:
             temp_b = int(temp_d)
             temp_b = ~temp_b
             temp_b += 1
-        else:
         #Convert the temperature to binary number
+        else:
             temp_b = int(temp_d)
             temp_b = '{0:07b}'.format(temp_b)
         led_a = str(temp_b)
@@ -58,7 +59,7 @@ def read_temp():
         read_button = open_button.read()
         get_button = read_button.split(" ")[0]
         #If the button is pushed from real button or virtual button
-        if (GPIO.input(23) == 0) or get_button == 'True': 
+        if (GPIO.input(23) == 0) or get_button == 'True':
             if led_1 == 1:
                 GPIO.output(21, True)
             if led_1 == 0:
@@ -87,7 +88,7 @@ def read_temp():
                 GPIO.output(5, True)
             if led_7 == 0:
                 GPIO.output(5, False)
-        #If the button is not  pushed, turn off the LEDs
+        #If the button is not  pushed, turn off all LEDs
         else:
             GPIO.output(21, False)
             GPIO.output(20, False)
@@ -97,7 +98,7 @@ def read_temp():
             GPIO.output(6, False)
             GPIO.output(5, False)
         res = str(temp_d)
-        #Save the temperature list to the savedData.txt
+        #Save all temperature data to the savedData.txt
         with open("/home/pi/savedData.txt", "r+") as myfile:
             content = myfile.read()
             myfile.seek(0,0)
@@ -112,8 +113,8 @@ def read_temp():
         dataTime.write(str(time.time()))
         dataTime.close()
         return temp_d,temp_b,led_1,led_2,led_3,led_4,led_5,led_6,led_7
-    
-    elif (GPIO.input(24) == 1): #If the power switch is off
+    #If the power switch is off
+    elif (GPIO.input(24) == 1):
         GPIO.output(21, False)
         GPIO.output(20, False)
         GPIO.output(26, False)
@@ -121,8 +122,8 @@ def read_temp():
         GPIO.output(13, False)
         GPIO.output(6, False)
         GPIO.output(5, False)
-        
-    else: #If the temperature sensor is not plugged into the third box, notify the user that there is an error condition
+    #If the temperature sensor is not plugged into the third box, notify the user that there is an error condition
+    else:
         GPIO.output(21, True)
         GPIO.output(20, True)
         GPIO.output(26, True)
@@ -152,4 +153,5 @@ def read_temp():
         dataTime.close()
 
 while True:
+    #run the code every seconds
     print(read_temp())

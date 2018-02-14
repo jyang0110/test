@@ -3,7 +3,7 @@
 #Sources:
 #http://shumeipai.nxez.com/2013/10/03/raspberry-pi-temperature-sensor-monitors.html
 #http://shumeipai.nxez.com/2014/09/13/raspberry-pi-ds18b20-temperature-sensor.html
-#other basic python guides and various stackoverflow and CSDN (China Software Developer Network) posts
+#other basic python guides and stackoverflow/CSDN (China Software Developer Network) posts
 
 import os
 import glob
